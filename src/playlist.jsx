@@ -13,11 +13,18 @@ export class Playlist extends PureComponent {
   componentDidMount() {
     let self = this;
     const apiKey = "AIzaSyBvom--SASjWG4Ah-2aIF1l_vGIo5AfKhQ";
+    const apiUrl = "https://www.googleapis.com/youtube/v3/playlistItems?";
     axios
-      .get(
-        `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet%2CcontentDetails&maxResults=25&playlistId=PLOUzUrKhNae51rhMgkY_v1BWWISuvjmkk&key=${apiKey}`
-      )
+      .get(apiUrl, {
+        part: "snippet,contentDetails",
+        maxResults: 25,
+        playlistId: "PLOUzUrKhNae51rhMgkY_v1BWWISuvjmkk",
+        key: apiKey,
+        pageToken: "CBkQAA",
+        fields: "items,nextPageToken,pageInfo,tokenPagination"
+      })
       .then(function(response) {
+        console.log(response);
         self.setState({
           items: response.data.items,
           info: response.data.pageInfo
@@ -33,7 +40,6 @@ export class Playlist extends PureComponent {
 
   render() {
     const { items, info } = this.state;
-    console.log(items, info);
     return (
       <Fragment>
         {items.map(item => (
